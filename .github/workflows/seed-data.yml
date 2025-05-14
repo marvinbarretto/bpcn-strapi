@@ -1,0 +1,33 @@
+name: Seed Data
+
+on:
+  workflow_dispatch:  # manual trigger
+
+jobs:
+  seed:
+    runs-on: ubuntu-latest
+    env:
+      NODE_ENV: production
+      STRAPI_SEEDER_TOKEN: ${{ secrets.STRAPI_SEEDER_TOKEN }}
+      API_URL: https://strong-cherry-a5c4bb2a89.strapiapp.com
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Seed Users
+        run: node scripts/seed-users.ts
+        
+      - name: Seed Events
+        run: node scripts/seed-events.ts
+
+      - name: Seed Pages
+        run: node scripts/seed-pages.ts
